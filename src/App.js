@@ -7,11 +7,17 @@ const initialItems = [
 ];
 
 export default function App() {
+  const [items, setItems] = useState([]);
+
+  function handleAddItems(item) {
+    setItems((items) => [...items, item]);
+  }
+
   return (
     <div className="app">
       <Logo />
-      <Form />
-      <PackingList />
+      <Form onAddItem={handleAddItems} />
+      <PackingList items={items} />
       <Stats />
     </div>
   );
@@ -21,14 +27,9 @@ function Logo() {
   return <h1>🌴 Far Away 👜</h1>;
 }
 
-function Form() {
+function Form({ onAddItem }) {
   const [description, setDescription] = useState("");
   const [quantity, setQuantity] = useState(1);
-  const [items, setItems] = useState([]);
-
-  function handleAddItems(item) {
-    setItems((items) => [...items, item]);
-  }
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -39,7 +40,7 @@ function Form() {
     const newItem = { description, quantity, packed: false, id: Date.now() };
     console.log(newItem);
 
-    handleAddItems(newItem);
+    onAddItem(newItem);
 
     // setting both description and quantity to their initial state after the data hass been captured
     setDescription("");
@@ -72,11 +73,11 @@ function Form() {
   );
 }
 
-function PackingList() {
+function PackingList({ items }) {
   return (
     <div className="list">
       <ul>
-        {initialItems.map((item) => (
+        {items.map((item) => (
           <Item item={item} key={item.id} />
         ))}
       </ul>
@@ -88,8 +89,7 @@ function Item({ item }) {
   return (
     <li>
       <span style={item.packed ? { textDecoration: "line-through" } : {}}>
-        {item.quantity}
-        {item.description}
+        {item.quantity} {item.description}
       </span>
       <button>❌</button>
     </li>
