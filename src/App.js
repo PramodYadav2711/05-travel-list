@@ -24,6 +24,11 @@ function Logo() {
 function Form() {
   const [description, setDescription] = useState("");
   const [quantity, setQuantity] = useState(1);
+  const [items, setItems] = useState([]);
+
+  function handleAddItems(item) {
+    setItems((items) => [...items, item]);
+  }
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -34,7 +39,9 @@ function Form() {
     const newItem = { description, quantity, packed: false, id: Date.now() };
     console.log(newItem);
 
-    // setting both description and quantity to their initail state after the data hass been captured
+    handleAddItems(newItem);
+
+    // setting both description and quantity to their initial state after the data hass been captured
     setDescription("");
     setQuantity(1);
   }
